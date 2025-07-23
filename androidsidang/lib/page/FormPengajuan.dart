@@ -13,7 +13,7 @@ class Formpengajuansidang extends StatefulWidget {
 
 class _FormpengajuansidangState extends State<Formpengajuansidang> {
   bool isVisible = false;
-  String UkuranFile="";
+  String UkuranFile = "";
   final _formKey = GlobalKey<FormState>();
   String? selectedValue;
   final List<String> items = ['Proposal', 'Hasil', 'Kompre'];
@@ -55,8 +55,7 @@ class _FormpengajuansidangState extends State<Formpengajuansidang> {
         tipeFileController.text = fileExtension;
         ukuranFileController.text = fileSizeKb.toString();
         isVisible = true;
-        UkuranFile= fileSizeKb.toString();
-    
+        UkuranFile = fileSizeKb.toString();
       });
     }
   }
@@ -275,22 +274,27 @@ class _FormpengajuansidangState extends State<Formpengajuansidang> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20,),
-                Container(
+                SizedBox(height: 20),
+                SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  child: ElevatedButton(onPressed: (){
-                    print("Ok");
-                  }, child: Text("Kirim Sekarang!",style: TextStyle(fontSize: 20,color: Colors.white),),
-                
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(10),
-                  backgroundColor: Colors.teal,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(5),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      print("Ok");
+                    },
+
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(10),
+                      backgroundColor: Colors.teal,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(5),
+                      ),
+                    ),
+                    child: Text(
+                      "Kirim Sekarang!",
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    ),
                   ),
-                  ),
-                )
-                )
+                ),
               ],
             ),
           ),

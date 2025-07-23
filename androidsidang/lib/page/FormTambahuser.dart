@@ -49,9 +49,12 @@ class _FormtambahuserState extends State<Formtambahuser> {
     if (response.statusCode == 201) {
       final data = jsonDecode(response.body);
       print("User created: ${data['data']}");
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("User berhasil dibuat"),backgroundColor: Colors.teal,));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("User berhasil dibuat"),
+          backgroundColor: Colors.teal,
+        ),
+      );
     } else {
       final Map<String, dynamic> errorData = jsonDecode(response.body);
 
@@ -73,9 +76,9 @@ class _FormtambahuserState extends State<Formtambahuser> {
 
       print("Gagal: $errorMessage");
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(errorMessage),backgroundColor: Colors.red[800],));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage), backgroundColor: Colors.red[800]),
+      );
     }
   }
 
@@ -247,7 +250,7 @@ class _FormtambahuserState extends State<Formtambahuser> {
                   ),
                 ),
                 SizedBox(height: 40),
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: ElevatedButton(
                     onPressed: () {

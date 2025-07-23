@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class Loginpage extends StatefulWidget {
   const Loginpage({super.key});
 
@@ -14,11 +13,9 @@ class Loginpage extends StatefulWidget {
 
 class _LoginpageState extends State<Loginpage> {
   bool _obscureText = true;
-   String _username = '';
+  final String _username = '';
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordControllers = TextEditingController();
-
-  
 
   Future<void> loginUser(
     BuildContext context,
@@ -32,7 +29,7 @@ class _LoginpageState extends State<Loginpage> {
         url,
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json', 
+          'Accept': 'application/json',
         },
         body: jsonEncode({'email': email, 'password': password}),
       );
@@ -45,33 +42,42 @@ class _LoginpageState extends State<Loginpage> {
             print("Login success!");
             print("User: ${data['user']}");
             print("Token: ${data['token']}");
-         
-            
-          
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text("Login berhasil"),duration: Duration(seconds: 1),));
-            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>Homepage()), (route)=>false);
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Login berhasil"),
+                duration: Duration(seconds: 1),
+              ),
+            );
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => Homepage()),
+              (route) => false,
+            );
           } else {
-            
             print("Bukan response JSON, ini isi body:");
             print(response.body); // ini biasanya halaman HTML
           }
         } catch (e) {
-           final data = jsonDecode(response.body);
+          final data = jsonDecode(response.body);
           print("Gagal parsing JSON: $e");
           print("Isi response: ${response.body}");
-          ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text("${data['message']}"),backgroundColor: Colors.red,));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("${data['message']}"),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
       } else {
-         final data = jsonDecode(response.body);
+        final data = jsonDecode(response.body);
         print("Status gagal: ${response.statusCode}");
         print("Isi response: ${response.body}");
-        ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text("${data['message']}",),backgroundColor: Colors.red,));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("${data['message']}"),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     } catch (e) {
       print("Terjadi kesalahan: $e");
@@ -127,7 +133,7 @@ class _LoginpageState extends State<Loginpage> {
                 ),
                 TextFormField(
                   controller: emailController,
-                 
+
                   decoration: InputDecoration(
                     // labelText: 'Email',
                     isDense: true, // Biar lebih kompak
@@ -217,7 +223,7 @@ class _LoginpageState extends State<Loginpage> {
               ),
             ),
             SizedBox(height: 40),
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width,
               child: ElevatedButton(
                 onPressed: () {
