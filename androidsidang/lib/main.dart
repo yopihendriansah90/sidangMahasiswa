@@ -1,5 +1,6 @@
 import 'package:androidsidang/page/Daftarsidangpage.dart';
 import 'package:androidsidang/page/FormPengajuan.dart';
+import 'package:androidsidang/page/FormTambahuser.dart';
 import 'package:androidsidang/page/Homepage.dart';
 import 'package:flutter/material.dart';
 import 'page/Loginpage.dart';
@@ -16,11 +17,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
       ),
-      home: Homepage(),
+      home: Loginpage(),
     );
   }
 }

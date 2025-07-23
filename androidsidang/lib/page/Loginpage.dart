@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'package:androidsidang/page/Homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class Loginpage extends StatefulWidget {
   const Loginpage({super.key});
@@ -9,6 +14,74 @@ class Loginpage extends StatefulWidget {
 
 class _LoginpageState extends State<Loginpage> {
   bool _obscureText = true;
+   String _username = '';
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordControllers = TextEditingController();
+
+  
+
+  Future<void> loginUser(
+    BuildContext context,
+    String email,
+    String password,
+  ) async {
+    final url = Uri.parse('http://192.168.122.1:8000/api/login');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json', 
+        },
+        body: jsonEncode({'email': email, 'password': password}),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        try {
+          final contentType = response.headers['content-type'];
+          if (contentType != null && contentType.contains('application/json')) {
+            final data = jsonDecode(response.body);
+            print("Login success!");
+            print("User: ${data['user']}");
+            print("Token: ${data['token']}");
+         
+            
+          
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text("Login berhasil"),duration: Duration(seconds: 1),));
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>Homepage()), (route)=>false);
+          } else {
+            
+            print("Bukan response JSON, ini isi body:");
+            print(response.body); // ini biasanya halaman HTML
+          }
+        } catch (e) {
+           final data = jsonDecode(response.body);
+          print("Gagal parsing JSON: $e");
+          print("Isi response: ${response.body}");
+          ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text("${data['message']}"),backgroundColor: Colors.red,));
+        }
+      } else {
+         final data = jsonDecode(response.body);
+        print("Status gagal: ${response.statusCode}");
+        print("Isi response: ${response.body}");
+        ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text("${data['message']}",),backgroundColor: Colors.red,));
+      }
+    } catch (e) {
+      print("Terjadi kesalahan: $e");
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +111,11 @@ class _LoginpageState extends State<Loginpage> {
             ),
             Text(
               "Login to continue",
-              style: TextStyle(fontSize: 18, color: Colors.teal,fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.teal,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(height: 30),
             Column(
@@ -49,7 +126,8 @@ class _LoginpageState extends State<Loginpage> {
                   style: TextStyle(fontSize: 18, color: Colors.teal),
                 ),
                 TextFormField(
-                  obscureText: _obscureText,
+                  controller: emailController,
+                 
                   decoration: InputDecoration(
                     // labelText: 'Email',
                     isDense: true, // Biar lebih kompak
@@ -82,6 +160,7 @@ class _LoginpageState extends State<Loginpage> {
                   style: TextStyle(fontSize: 18, color: Colors.teal),
                 ),
                 TextFormField(
+                  controller: passwordControllers,
                   obscureText: _obscureText,
                   decoration: InputDecoration(
                     // labelText: 'Password',
@@ -130,7 +209,10 @@ class _LoginpageState extends State<Loginpage> {
                 },
                 child: Text(
                   "Forget Password",
-                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -138,7 +220,11 @@ class _LoginpageState extends State<Loginpage> {
             Container(
               width: MediaQuery.of(context).size.width,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  final email = emailController.text.trim();
+                  final password = passwordControllers.text.trim();
+                  loginUser(context, email, password);
+                },
 
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(10),

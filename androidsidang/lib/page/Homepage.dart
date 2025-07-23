@@ -1,15 +1,20 @@
 import 'package:androidsidang/page/Daftarsidangpage.dart';
 import 'package:androidsidang/page/FormPengajuan.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({super.key});
 
+  const Homepage({super.key, });
+ 
+  
   @override
   State<Homepage> createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
+  late String user;
+
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
@@ -23,6 +28,19 @@ class _HomepageState extends State<Homepage> {
     });
   }
 
+  Future<void> _loadUsername() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      user = prefs.getString('name')?? 'Belum ada nama';
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadUsername();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +71,9 @@ class _HomepageState extends State<Homepage> {
 }
 
 class Beranda extends StatefulWidget {
+
+  
+
    Beranda({super.key});
   final List<MenuItemData> menuItems = [
     MenuItemData(icon: Icons.upload_file, title: "Pengajuan Jadwal", subtitle: "Ajukan Sidang"),
@@ -66,7 +87,6 @@ class Beranda extends StatefulWidget {
 
 class _BerandaState extends State<Beranda> {
 
-  
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +99,7 @@ class _BerandaState extends State<Beranda> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Halo, Yopi",
+            "Halo, ",
             style: TextStyle(
               fontSize: 30,
               color: Colors.teal,
